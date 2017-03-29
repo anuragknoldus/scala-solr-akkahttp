@@ -43,10 +43,11 @@ class SolrAccess(solrClientForInsert: HttpSolrClient,solrClientForExecute: HttpS
    * @return
    */
 
-  def createOrUpdateRecord(book_Details: BookDetails): Option[Int] = {
+  def createOrUpdateRecord(book_Details: BookDetails, sdoc: SolrInputDocument): Option[Int] = {
     try {
       //val solrClient = new HttpSolrClient.Builder(url).build()
-      val sdoc = new SolrInputDocument()
+
+      println(":::::::::::::::::::  sdoc")
       sdoc.addField("id", book_Details.id)
       sdoc.addField("cat", book_Details.cat)
       sdoc.addField("name", book_Details.name)
@@ -57,7 +58,9 @@ class SolrAccess(solrClientForInsert: HttpSolrClient,solrClientForExecute: HttpS
       sdoc.addField("inStock", book_Details.inStock)
       sdoc.addField("price", book_Details.price)
       sdoc.addField("pages_i", book_Details.pages_i)
+      println("::::::::::::::::::: sdoc " + sdoc + s" --- $collection_name")
       println("::::::::::::::::::: before calling the function")
+      println(sdoc.getFieldNames.toArray().toList)
       val result: UpdateResponse = solrClientForInsert.add(collection_name, sdoc)
       println("::::::::::::::::::::::::::: result in updated Response " + result)
       Some(result.getStatus)

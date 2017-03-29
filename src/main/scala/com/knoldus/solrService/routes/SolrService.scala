@@ -11,6 +11,7 @@ import com.knoldus.solrService.factories.{BookDetails, SolrAccess}
 import com.typesafe.config.ConfigFactory
 import spray.json.DefaultJsonProtocol
 import org.apache.solr.client.solrj.impl.HttpSolrClient
+import org.apache.solr.common.SolrInputDocument
 
 /**
  * Created by anurag on 22/2/17.
@@ -54,7 +55,7 @@ trait SolrService {
         entity(as[BookDetails]) { entity =>
           complete {
             try {
-              val isPersisted: Option[Int] = solrAccess.createOrUpdateRecord(entity)
+              val isPersisted: Option[Int] = solrAccess.createOrUpdateRecord(entity, new SolrInputDocument)
               isPersisted match {
                 case Some(data) => HttpResponse(StatusCodes.Created,
                   entity = "Data is successfully persisted")
